@@ -8,8 +8,4 @@
     <PackageReference Include="Jellyfin.Controller" Version="10.6.0" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /y /d  &quot;$(TargetPath)&quot; &quot;C:\Users\Rob\Desktop\jellyfin-data\plugins&quot;" />
-  </Target>
-
 </Project>
