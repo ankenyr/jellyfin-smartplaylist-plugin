@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Jellyfin.Plugin.SmartPlaylist": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\Rob\\source\\repos\\jellyfin\\Jellyfin.Server\\bin\\Debug\\netcoreapp3.1\\jellyfin.exe",
+      "commandLineArgs": "-w C:\\Users\\Rob\\source\\repos\\jellyfin-web\\dist\\ -d C:\\Users\\Rob\\Desktop\\jellyfin-data\\ -c C:\\Users\\Rob\\Desktop\\jellyfin-config\\ --noautorunwebapp"
+    }
+  }
+}
