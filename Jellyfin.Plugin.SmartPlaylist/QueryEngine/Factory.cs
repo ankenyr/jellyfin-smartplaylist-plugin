@@ -15,7 +15,6 @@ namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
             var operand = new Operand(baseItem.Name);
             var directors = new List<string> { };
             var people = libraryManager.GetPeople(baseItem);
-            var foo = people.Any();
             if (people.Any())
             {
                 operand.Directors = people.Where(x => x.Type.Equals("Director")).Select(x => x.Name).ToList();

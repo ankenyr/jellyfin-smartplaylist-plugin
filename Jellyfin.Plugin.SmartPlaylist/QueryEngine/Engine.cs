@@ -34,8 +34,7 @@ namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
 			var paramUser = System.Linq.Expressions.Expression.Parameter(typeof(Operand));
 			System.Linq.Expressions.Expression expr = BuildExpr<T>(r, paramUser);
 			// build a lambda function User->bool and compile it
-			var foo = System.Linq.Expressions.Expression.Lambda<Func<T, bool>>(expr, paramUser);
-			var value = foo.Compile(true);
+			var value = System.Linq.Expressions.Expression.Lambda<Func<T, bool>>(expr, paramUser).Compile(true);
 			return value;
 		}
 
