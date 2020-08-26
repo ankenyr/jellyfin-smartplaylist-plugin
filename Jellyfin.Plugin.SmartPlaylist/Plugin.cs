@@ -1,23 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.IO;
-using Microsoft.Extensions.Logging;
 using MediaBrowser.Common.Configuration;
 using MediaBrowser.Common.Plugins;
-using MediaBrowser.Controller;
-using MediaBrowser.Controller.Library;
-using MediaBrowser.Controller.Playlists;
-using MediaBrowser.Controller.Session;
-using MediaBrowser.Controller.Providers;
-using MediaBrowser.Model.Drawing;
-using MediaBrowser.Model.Library;
 using MediaBrowser.Model.Plugins;
 using MediaBrowser.Model.Serialization;
-using MediaBrowser.Model.Playlists;
-using MediaBrowser.Model.Querying;
-using MediaBrowser.Controller.Entities;
-using Jellyfin.Data.Entities;
 
 
 namespace Jellyfin.Plugin.SmartPlaylist
