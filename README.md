@@ -41,6 +41,7 @@ To create a new playlist, create a json file in this directory having a format s
 - Document all operators that are valid for each property.
 - Explore creating custom property types with custom operators.
 - Once Jellyfin allows for custom web pages beyond the configuration page, explore how to allow configuration from the web interface rather than JSON files.
+- Add ability to provide sorting method for playlists
 
 ##Credits
 Rule engine was inspired by [this](https://stackoverflow.com/questions/6488034/how-to-implement-a-rule-engine "this") post in Stack Overflow.
