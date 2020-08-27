@@ -155,7 +155,7 @@ namespace Jellyfin.Plugin.SmartPlaylist.ScheduleTasks
                     IncludeItemTypes = SupportedItemTypeNames,
                     Recursive = true,
                 };
-                var plitems = playlist.GetChildren(user, false, query).ToList();
+                var plitems = playlist.GetChildren(user, false, query).ToList().Take(dto.MaxItems);
                 var toremove = plitems.Select(x => x.Id.ToString()).ToList();
                 RemoveFromPlaylist(playlist.Id.ToString(), toremove);
                 _playlistManager.AddToPlaylist(playlist.Id.ToString(), new_items.Select(x => x.Id).ToArray(), user.Id);
