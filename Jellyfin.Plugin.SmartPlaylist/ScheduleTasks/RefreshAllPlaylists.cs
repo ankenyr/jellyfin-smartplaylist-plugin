@@ -23,14 +23,11 @@ namespace Jellyfin.Plugin.SmartPlaylist.ScheduleTasks
 {
     public class RefreshAllPlaylists : IScheduledTask, IConfigurableScheduledTask
     {
-        private readonly IDtoService _dtoService;
         private readonly IFileSystem _fileSystem;
-        private readonly IJsonSerializer _jsonSerializer;
         private readonly ILibraryManager _libraryManager;
         private readonly ILogger _logger;
         private readonly IPlaylistManager _playlistManager;
         private readonly IProviderManager _providerManager;
-        private readonly IServerApplicationPaths _serverApplicationPaths;
         private readonly ISmartPlaylistFileSystem _plFileSystem;
         private readonly ISmartPlaylistStore _plStore;
         private readonly IUserManager _userManager;
@@ -46,15 +43,11 @@ namespace Jellyfin.Plugin.SmartPlaylist.ScheduleTasks
             IUserManager userManager
             )
         {
-            
-            _dtoService = dtoService;
             _fileSystem = fileSystem;
-            _jsonSerializer = jsonSerializer;
             _libraryManager = libraryManager;
             _logger = logger;
             _playlistManager = playlistManager;
             _providerManager = providerManager;
-            _serverApplicationPaths = serverApplicationPaths;
             _userManager = userManager;
             
             _plFileSystem = new SmartPlaylistFileSystem(serverApplicationPaths);
