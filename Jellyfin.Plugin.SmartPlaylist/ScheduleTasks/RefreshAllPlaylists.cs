@@ -46,6 +46,7 @@ namespace Jellyfin.Plugin.SmartPlaylist.ScheduleTasks
             IUserManager userManager
             )
         {
+            
             _dtoService = dtoService;
             _fileSystem = fileSystem;
             _jsonSerializer = jsonSerializer;
@@ -58,6 +59,8 @@ namespace Jellyfin.Plugin.SmartPlaylist.ScheduleTasks
             
             _plFileSystem = new SmartPlaylistFileSystem(serverApplicationPaths);
             _plStore = new SmartPlaylistStore(jsonSerializer, _plFileSystem);
+           
+            _logger.LogInformation("Constructed Refresher ");
         }
         public static readonly Type[] SupportedItemTypes = { typeof(Audio), typeof(MediaBrowser.Controller.Entities.Movies.Movie), typeof(MediaBrowser.Controller.Entities.TV.Episode) };
         public static readonly string[] SupportedItemTypeNames = SupportedItemTypes.Select(x => x.Name).ToArray();
@@ -114,9 +117,19 @@ namespace Jellyfin.Plugin.SmartPlaylist.ScheduleTasks
             foreach (var dto in dtos.Result)
             {
                 var user = _userManager.GetUserByName(dto.User);
-                var playlists = _playlistManager.GetPlaylists(user.Id);
-                var p = playlists.Where(x => x.Id.ToString().Replace("-", "") == dto.Id);
-                dto.Expressions = Engine.FixRules(dto.Expressions);
+                List<Playlist> p;
+                try 
+                {
+                    var playlists = _playlistManager.GetPlaylists(user.Id);
+                    p = playlists.Where(x => x.Id.ToString().Replace("-", "") == dto.Id).ToList();
+                    dto.Expressions = Engine.FixRules(dto.Expressions);
+                }
+                catch (NullReferenceException ex)
+                {
+                    _logger.LogError(ex, "No user named {0} found, please fix playlist {1}", dto.User, dto.Name);
+                    continue;
+                }
+               
                 var compiledRules = dto.Expressions.Select(r => Engine.CompileRule<Operand>(r)).ToList();
                 if (dto.Id == null | p.Count() == 0)
                 {
