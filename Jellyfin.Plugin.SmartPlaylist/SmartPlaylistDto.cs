@@ -12,6 +12,11 @@ namespace Jellyfin.Plugin.SmartPlaylist
         public string FileName { get; set; }
         public string User { get; set; }
         public List<Expression> Expressions { get; set; }
-        public int MaxItems { get; set; } = 1000;
+        public int MaxItems { get; set; }
+        public OrderDto Order { get; set; }
+    }
+    public class OrderDto
+    {
+        public string Name { get; set; }
     }
 }

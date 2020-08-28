@@ -18,6 +18,7 @@ using MediaBrowser.Controller.Dto;
 using MediaBrowser.Model.Querying;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.IO;
+using AutoMapper;
 
 namespace Jellyfin.Plugin.SmartPlaylist.ScheduleTasks
 {
@@ -32,7 +33,6 @@ namespace Jellyfin.Plugin.SmartPlaylist.ScheduleTasks
         private readonly ISmartPlaylistStore _plStore;
         private readonly IUserManager _userManager;
         public RefreshAllPlaylists(
-            IDtoService dtoService,
             IFileSystem fileSystem,
             IJsonSerializer jsonSerializer,
             ILibraryManager libraryManager,
@@ -93,14 +93,15 @@ namespace Jellyfin.Plugin.SmartPlaylist.ScheduleTasks
 
         }
 
-        private QueryResult<BaseItem> GetAllUserMedia(User user)
+        private IEnumerable<BaseItem> GetAllUserMedia(User user)
         {
             var query = new InternalItemsQuery(user)
             {
                 IncludeItemTypes = SupportedItemTypeNames,
                 Recursive = true,
             };
-            return _libraryManager.GetItemsResult(query);
+            
+            return (IEnumerable<BaseItem>)_libraryManager.GetItemsResult(query).Items;
         }
 
         public Task Execute(CancellationToken cancellationToken, IProgress<double> progress)
@@ -109,21 +110,22 @@ namespace Jellyfin.Plugin.SmartPlaylist.ScheduleTasks
             dtos.Wait();
             foreach (var dto in dtos.Result)
             {
-                var user = _userManager.GetUserByName(dto.User);
+                SmartPlaylist smart_playlist = new SmartPlaylist(dto);
+
+                var user = _userManager.GetUserByName(smart_playlist.User);
                 List<Playlist> p;
-                try 
+                try
                 {
                     var playlists = _playlistManager.GetPlaylists(user.Id);
                     p = playlists.Where(x => x.Id.ToString().Replace("-", "") == dto.Id).ToList();
-                    dto.Expressions = Engine.FixRules(dto.Expressions);
                 }
                 catch (NullReferenceException ex)
                 {
                     _logger.LogError(ex, "No user named {0} found, please fix playlist {1}", dto.User, dto.Name);
                     continue;
                 }
-               
-                var compiledRules = dto.Expressions.Select(r => Engine.CompileRule<Operand>(r)).ToList();
+
+                
                 if (dto.Id == null | p.Count() == 0)
                 {
                     _logger.LogInformation("Playlist ID not set, creating new playlist");
@@ -131,27 +133,20 @@ namespace Jellyfin.Plugin.SmartPlaylist.ScheduleTasks
                     dto.Id = plid;
                     _plStore.Save(dto);
                 }
-                var new_items = new List<BaseItem> { };
-                var results = GetAllUserMedia(user);
-                foreach (var i in results.Items)
-                {
-                    var operand = OperandFactory.GetMediaType(_libraryManager, i, user);
-
-                    if (compiledRules.All(rule => rule(operand)))
-                    {
-                        new_items.Add(i);
-                    }
-                }
+                
+                var new_items = smart_playlist.FilterPlaylistItems(GetAllUserMedia(user), _libraryManager, user);
+                
                 var playlist = p.First();
                 var query = new InternalItemsQuery(user)
                 {
                     IncludeItemTypes = SupportedItemTypeNames,
                     Recursive = true,
                 };
-                var plitems = playlist.GetChildren(user, false, query).ToList().Take(dto.MaxItems);
+                var plitems = playlist.GetChildren(user, false, query).ToList();
+                
                 var toremove = plitems.Select(x => x.Id.ToString()).ToList();
                 RemoveFromPlaylist(playlist.Id.ToString(), toremove);
-                _playlistManager.AddToPlaylist(playlist.Id.ToString(), new_items.Select(x => x.Id).ToArray(), user.Id);
+                _playlistManager.AddToPlaylist(playlist.Id.ToString(), new_items.ToArray(), user.Id);
             }
             return Task.CompletedTask;
         }
