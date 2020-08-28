@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jellyfin.Plugin.SmartPlaylist", "Jellyfin.Plugin.SmartPlaylist\Jellyfin.Plugin.SmartPlaylist.csproj", "{EFE3257F-C3D6-4D49-AF40-486CBABAF49C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jellyfin.Plugin.SmartPlaylist", "Jellyfin.Plugin.SmartPlaylist\Jellyfin.Plugin.SmartPlaylist.csproj", "{EFE3257F-C3D6-4D49-AF40-486CBABAF49C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{C240ECDA-10A6-42DE-A374-F89EC473498F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{EFE3257F-C3D6-4D49-AF40-486CBABAF49C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFE3257F-C3D6-4D49-AF40-486CBABAF49C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFE3257F-C3D6-4D49-AF40-486CBABAF49C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C240ECDA-10A6-42DE-A374-F89EC473498F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C240ECDA-10A6-42DE-A374-F89EC473498F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C240ECDA-10A6-42DE-A374-F89EC473498F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C240ECDA-10A6-42DE-A374-F89EC473498F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

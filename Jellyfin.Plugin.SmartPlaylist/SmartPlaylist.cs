@@ -8,14 +8,14 @@ using System.Linq;
 
 namespace Jellyfin.Plugin.SmartPlaylist
 {
-    class SmartPlaylist
+    public class SmartPlaylist
     {
         public string Id { get; set; }
         public string Name { get; set; }
         public string FileName { get; set; }
         public string User { get; set; }
         public List<Expression> Expressions { get; set; }
-        public int MaxItems { get; set; } = 1000;
+        public int MaxItems { get; set; }
         public Order Order { get; set; }
 
         public SmartPlaylist(SmartPlaylistDto dto)
@@ -24,8 +24,15 @@ namespace Jellyfin.Plugin.SmartPlaylist
             this.Name = dto.Name;
             this.FileName = dto.FileName;
             this.User = dto.User;
-            this.Expressions = dto.Expressions = Engine.FixRules(dto.Expressions);
-            this.MaxItems = dto.MaxItems;
+            this.Expressions = Engine.FixRules(dto.Expressions);
+            if (dto.MaxItems > 0)
+            {
+                this.MaxItems = dto.MaxItems;
+            }
+            else
+            {
+                this.MaxItems = 1000;
+            }
 
             switch (dto.Order.Name)
             {
