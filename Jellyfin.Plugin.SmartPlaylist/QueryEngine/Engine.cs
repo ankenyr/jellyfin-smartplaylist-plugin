@@ -20,7 +20,7 @@ namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
 				return System.Linq.Expressions.Expression.MakeBinary(tBinary, left, right);
 			}
 			else
-			{	
+			{
 				var method = tProp.GetMethod(r.Operator);
 				var tParam = method.GetParameters()[0].ParameterType;
 				var right = System.Linq.Expressions.Expression.Constant(Convert.ChangeType(r.TargetValue, tParam));
@@ -38,9 +38,18 @@ namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
 			return value;
 		}
 
-		public static List<Expression> FixRules(List<Expression> rules)
+		public static List<ExpressionSet> FixRuleSets(List<ExpressionSet> rulesets)
 		{
-			foreach (var rule in rules)
+			foreach (var rules in rulesets)
+			{
+				FixRules(rules);
+			}
+			return rulesets;
+		}
+
+		public static ExpressionSet FixRules(ExpressionSet rules)
+		{
+			foreach (var rule in rules.Expressions)
 			{
 				if (rule.MemberName == "PremiereDate")
 				{

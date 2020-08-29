@@ -14,7 +14,7 @@ namespace Jellyfin.Plugin.SmartPlaylist
         public string Name { get; set; }
         public string FileName { get; set; }
         public string User { get; set; }
-        public List<Expression> Expressions { get; set; }
+        public List<ExpressionSet> ExpressionSets { get; set; }
         public int MaxItems { get; set; }
         public Order Order { get; set; }
 
@@ -24,7 +24,7 @@ namespace Jellyfin.Plugin.SmartPlaylist
             this.Name = dto.Name;
             this.FileName = dto.FileName;
             this.User = dto.User;
-            this.Expressions = Engine.FixRules(dto.Expressions);
+            this.ExpressionSets = Engine.FixRuleSets(dto.ExpressionSets);
             if (dto.MaxItems > 0)
             {
                 this.MaxItems = dto.MaxItems;
@@ -53,17 +53,27 @@ namespace Jellyfin.Plugin.SmartPlaylist
             }
             
         }
+        private List<List<Func<Operand, bool>>> CompileRuleSets()
+        {
+
+            List<List<Func<Operand, bool>>> compiledRuleSets = new List<List<Func<Operand, bool>>>();
+            foreach(var set in this.ExpressionSets)
+            {
+                compiledRuleSets.Add(set.Expressions.Select(r => Engine.CompileRule<Operand>(r)).ToList());
+            }
+            return compiledRuleSets;
+        }
         // Returns the ID's of the items, if order is provided the IDs are sorted.
         public IEnumerable<Guid> FilterPlaylistItems(IEnumerable<BaseItem> items, ILibraryManager libraryManager, User user)
         {
             var results = new List<BaseItem> { };
-            
-            var compiledRules = this.Expressions.Select(r => Engine.CompileRule<Operand>(r)).ToList();
+
+            var compiledRules = CompileRuleSets();
             foreach (var i in items)
             {
                 var operand = OperandFactory.GetMediaType(libraryManager, i, user);
-
-                if (compiledRules.All(rule => rule(operand)))
+                
+                if (compiledRules.Any(set => set.All(rule => rule(operand))))
                 {
                     results.Add(i);
                 }

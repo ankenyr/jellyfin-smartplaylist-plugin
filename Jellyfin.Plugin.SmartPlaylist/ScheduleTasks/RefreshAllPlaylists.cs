@@ -125,7 +125,7 @@ namespace Jellyfin.Plugin.SmartPlaylist.ScheduleTasks
                     continue;
                 }
 
-                
+
                 if (dto.Id == null | p.Count() == 0)
                 {
                     _logger.LogInformation("Playlist ID not set, creating new playlist");
@@ -133,9 +133,9 @@ namespace Jellyfin.Plugin.SmartPlaylist.ScheduleTasks
                     dto.Id = plid;
                     _plStore.Save(dto);
                 }
-                
+
                 var new_items = smart_playlist.FilterPlaylistItems(GetAllUserMedia(user), _libraryManager, user);
-                
+
                 var playlist = p.First();
                 var query = new InternalItemsQuery(user)
                 {
@@ -143,7 +143,7 @@ namespace Jellyfin.Plugin.SmartPlaylist.ScheduleTasks
                     Recursive = true,
                 };
                 var plitems = playlist.GetChildren(user, false, query).ToList();
-                
+
                 var toremove = plitems.Select(x => x.Id.ToString()).ToList();
                 RemoveFromPlaylist(playlist.Id.ToString(), toremove);
                 _playlistManager.AddToPlaylist(playlist.Id.ToString(), new_items.ToArray(), user.Id);
