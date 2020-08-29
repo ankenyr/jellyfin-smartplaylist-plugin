@@ -12,13 +12,10 @@ using MediaBrowser.Controller.Entities.Audio;
 using Microsoft.Extensions.Logging;
 using MediaBrowser.Controller.Playlists;
 using MediaBrowser.Model.Playlists;
-using Jellyfin.Plugin.SmartPlaylist.QueryEngine;
 using Jellyfin.Data.Entities;
-using MediaBrowser.Controller.Dto;
-using MediaBrowser.Model.Querying;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.IO;
-using AutoMapper;
+
 
 namespace Jellyfin.Plugin.SmartPlaylist.ScheduleTasks
 {
