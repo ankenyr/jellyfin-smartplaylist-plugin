@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.0.0" />
     <PackageReference Include="Jellyfin.Controller" Version="10.6.0" />
   </ItemGroup>
 
