@@ -132,6 +132,8 @@ namespace Jellyfin.Plugin.SmartPlaylist.ScheduleTasks
                     var plid = CreateNewPlaylist(dto, user);
                     dto.Id = plid;
                     _plStore.Save(dto);
+                    var playlists = _playlistManager.GetPlaylists(user.Id);
+                    p = playlists.Where(x => x.Id.ToString().Replace("-", "") == dto.Id).ToList();
                 }
 
                 var new_items = smart_playlist.FilterPlaylistItems(GetAllUserMedia(user), _libraryManager, user);
