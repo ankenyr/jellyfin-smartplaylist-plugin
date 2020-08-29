@@ -70,7 +70,7 @@ namespace Jellyfin.Plugin.SmartPlaylist.ScheduleTasks
             {
                 new TaskTriggerInfo
                 {
-                    IntervalTicks = TimeSpan.FromMinutes(1).Ticks,
+                    IntervalTicks = TimeSpan.FromMinutes(30).Ticks,
                     Type = TaskTriggerInfo.TriggerInterval,
 
                 }
