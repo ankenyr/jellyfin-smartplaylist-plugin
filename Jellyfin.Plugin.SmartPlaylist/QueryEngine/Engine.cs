@@ -21,11 +21,21 @@ namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
 			}
 			else
 			{
-				var method = tProp.GetMethod(r.Operator);
-				var tParam = method.GetParameters()[0].ParameterType;
-				var right = System.Linq.Expressions.Expression.Constant(Convert.ChangeType(r.TargetValue, tParam));
-				// use a method call, e.g. 'Contains' -> 'u.Tags.Contains(some_tag)'
-				return System.Linq.Expressions.Expression.Call(left, method, right);
+				if (tProp.Name == "String")
+				{
+					var method = tProp.GetMethod(r.Operator, new Type[] { typeof(string) });
+					var tParam = method.GetParameters()[0].ParameterType;
+					var right = System.Linq.Expressions.Expression.Constant(Convert.ChangeType(r.TargetValue, tParam));
+					// use a method call, e.g. 'Contains' -> 'u.Tags.Contains(some_tag)'
+					return System.Linq.Expressions.Expression.Call(left, method, right);
+				}
+				else { 
+				  var method = tProp.GetMethod(r.Operator);
+				  var tParam = method.GetParameters()[0].ParameterType;
+				  var right = System.Linq.Expressions.Expression.Constant(Convert.ChangeType(r.TargetValue, tParam));
+					// use a method call, e.g. 'Contains' -> 'u.Tags.Contains(some_tag)'
+					return System.Linq.Expressions.Expression.Call(left, method, right);
+				}
 			}
 		}
 

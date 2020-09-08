@@ -39,6 +39,7 @@ namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
                 TimeSpan diff = dt.ToUniversalTime() - origin;
                 operand.PremiereDate = Math.Floor(diff.TotalSeconds);
             }
+            operand.FolderPath = baseItem.ContainingFolderPath;
             return operand;
         }
     }

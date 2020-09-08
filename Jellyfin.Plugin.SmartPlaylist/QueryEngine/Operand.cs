@@ -13,6 +13,7 @@ namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
         public List<string> GuestStars { get; set; }
         public bool IsPlayed { get; set; }
         public string Name { get; set; }
+        public string FolderPath { get; set; }
         public double PremiereDate { get; set; }
         public List<string> Producers { get; set; }
         public List<string> Studios { get; set; }
@@ -27,6 +28,7 @@ namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
             Genres = new List<string>();
             GuestStars = new List<string>();
             Name = name;
+            FolderPath = "";
             PremiereDate = 0;
             Producers = new List<string>();
             Studios = new List<string>();
