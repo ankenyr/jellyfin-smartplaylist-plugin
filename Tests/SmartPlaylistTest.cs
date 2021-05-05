@@ -15,9 +15,15 @@ namespace Tests
             dto.Id = "87ccaa10-f801-4a7a-be40-46ede34adb22";
             dto.Name = "Foo";
             dto.User = "Rob";
-            dto.Expressions = new List<Expression>
+            
+            var es = new ExpressionSet();
+            es.Expressions = new List<Expression>
             {
                 new Expression("foo", "bar", "biz")
+            };
+            dto.ExpressionSets = new List<ExpressionSet>
+            {
+                es
             };
             dto.Order = new OrderDto
             {
@@ -29,10 +35,9 @@ namespace Tests
             Assert.Equal("87ccaa10-f801-4a7a-be40-46ede34adb22", smart_playlist.Id);
             Assert.Equal("Foo", smart_playlist.Name);
             Assert.Equal("Rob", smart_playlist.User);
-
-            Assert.Equal("foo", smart_playlist.Expressions[0].MemberName);
-            Assert.Equal("bar",smart_playlist.Expressions[0].Operator);
-            Assert.Equal("biz",smart_playlist.Expressions[0].TargetValue);
+            Assert.Equal("foo", smart_playlist.ExpressionSets[0].Expressions[0].MemberName);
+            Assert.Equal("bar",smart_playlist.ExpressionSets[0].Expressions[0].Operator);
+            Assert.Equal("biz",smart_playlist.ExpressionSets[0].Expressions[0].TargetValue);
             Assert.Equal("PremiereDateOrderDesc", smart_playlist.Order.GetType().Name);
         }
     }
