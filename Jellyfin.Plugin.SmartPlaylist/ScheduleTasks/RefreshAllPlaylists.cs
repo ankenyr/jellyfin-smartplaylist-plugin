@@ -145,7 +145,7 @@ namespace Jellyfin.Plugin.SmartPlaylist.ScheduleTasks
 
                 var toremove = plitems.Select(x => x.Id.ToString()).ToList();
                 RemoveFromPlaylist(playlist.Id.ToString(), toremove);
-                _playlistManager.AddToPlaylist(playlist.Id.ToString(), new_items.ToArray(), user.Id);
+                _playlistManager.AddToPlaylistAsync(playlist.Id, new_items.ToArray(), user.Id);
             }
             return Task.CompletedTask;
         }
@@ -166,8 +166,7 @@ namespace Jellyfin.Plugin.SmartPlaylist.ScheduleTasks
             playlist.LinkedChildren = children.Except(removals)
                 .Select(i => i.Item1)
                 .ToArray();
-
-            playlist.UpdateToRepository(ItemUpdateType.MetadataEdit, CancellationToken.None);
+            playlist.UpdateToRepositoryAsync(ItemUpdateType.MetadataEdit, CancellationToken.None);
 
             _providerManager.QueueRefresh(
                 playlist.Id,
