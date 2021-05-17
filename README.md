@@ -55,7 +55,7 @@ To create a new playlist, create a json file in this directory having a format s
 - FileName: The actual filename. If you create a file named cgpgrey_playlist.json then this should be cgpgrey_playlist
 - User: Name of the user for the playlist
 - ExpressionSets: This is a list of Expressions. Each expression is OR'ed together.
-- Expressions: This is the meat of the plugin. Expressions are a list of maps containing MemberName, Operator, and TargetValue. I am working on a list of all valid things. [This link](msdn.microsoft.com/en-us/library/bb361179.aspx "This link") is a list of all valid operators within expression trees but only a subset are valid for this.
+- Expressions: This is the meat of the plugin. Expressions are a list of maps containing MemberName, Operator, and TargetValue. I am working on a list of all valid things. [This link](https://docs.microsoft.com/en-us/dotnet/api/system.linq.expressions.expressiontype?redirectedfrom=MSDN&view=net-5.0) is a list of all valid operators within expression trees but only a subset are valid for this.
 
 - MemberName: This is a reference to the properties in [Operand](https://github.com/ankenyr/jellyfin-smartplaylist-plugin/blob/master/Jellyfin.Plugin.SmartPlaylist/QueryEngine/Operand.cs "Operand"). You set this string to one of the property names to reference what you wish to filter on.
 - Operator: An operation used to compare the TargetValue to the property of each piece of media. The above example would match anything with the director set as CGP Grey with a Premiere Date less than 2020/07/01
