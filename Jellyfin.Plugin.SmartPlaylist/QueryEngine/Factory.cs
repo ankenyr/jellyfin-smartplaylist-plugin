@@ -14,7 +14,10 @@ namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
         {
 
             var operand = new Operand(baseItem.Name);
-            var directors = new List<string> { };
+            
+            // Unused var
+            //var directors = new List<string> { };
+            
             var people = libraryManager.GetPeople(baseItem);
             if (people.Any())
             {
@@ -39,6 +42,38 @@ namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
                 TimeSpan diff = dt.ToUniversalTime() - origin;
                 operand.PremiereDate = Math.Floor(diff.TotalSeconds);
             }
+
+            Guid[] ids = new Guid[] {
+                 baseItem.Id
+            };
+
+            var artists = libraryManager.GetAlbumArtists(new InternalItemsQuery(user)
+            {
+                ItemIds = ids
+            });
+
+            var artistNames = artists.Items.Select(i => i.Item1.Name).ToList();
+            operand.Artists = artistNames;
+
+            if (baseItem.DateCreated != null)
+            {
+                DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+                var dt = DateTime.Parse(baseItem.DateCreated.ToString());
+                TimeSpan diff = dt.ToUniversalTime() - origin;
+                operand.DateCreated = Math.Floor(diff.TotalSeconds);
+            }
+
+            // operand.Album = baseItem.Album;
+
+            // album name
+            // date last played
+            // DONE - date added to jf
+            // DONE - song name
+            // play count - field might not exist
+
+            // Song/Episode/Movie name
+            operand.ItemName = baseItem.Name;
+
             operand.FolderPath = baseItem.ContainingFolderPath;
             return operand;
         }
