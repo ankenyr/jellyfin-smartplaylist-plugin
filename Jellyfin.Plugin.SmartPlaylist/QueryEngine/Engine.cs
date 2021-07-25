@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
 {
@@ -19,23 +21,37 @@ namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
 				// use a binary operation, e.g. 'Equal' -> 'u.Age == 15'
 				return System.Linq.Expressions.Expression.MakeBinary(tBinary, left, right);
 			}
-			else
+
+			if (r.Operator == "MatchRegex" || r.Operator == "NotMatchRegex")
 			{
-				if (tProp.Name == "String")
-				{
-					var method = tProp.GetMethod(r.Operator, new Type[] { typeof(string) });
-					var tParam = method.GetParameters()[0].ParameterType;
-					var right = System.Linq.Expressions.Expression.Constant(Convert.ChangeType(r.TargetValue, tParam));
-					// use a method call, e.g. 'Contains' -> 'u.Tags.Contains(some_tag)'
-					return System.Linq.Expressions.Expression.Call(left, method, right);
-				}
-				else { 
-				  var method = tProp.GetMethod(r.Operator);
-				  var tParam = method.GetParameters()[0].ParameterType;
-				  var right = System.Linq.Expressions.Expression.Constant(Convert.ChangeType(r.TargetValue, tParam));
-					// use a method call, e.g. 'Contains' -> 'u.Tags.Contains(some_tag)'
-					return System.Linq.Expressions.Expression.Call(left, method, right);
-				}
+				var regex = new Regex(r.TargetValue);
+				var method = typeof(Regex).GetMethod("IsMatch", new[] {typeof(string)});
+				Debug.Assert(method != null, nameof(method) + " != null");
+				var callInstance = System.Linq.Expressions.Expression.Constant(regex);
+
+				var toStringMethod = tProp.GetMethod("ToString", new Type[0]);
+				Debug.Assert(toStringMethod != null, nameof(toStringMethod) + " != null");
+				var methodParam = System.Linq.Expressions.Expression.Call(left, toStringMethod);
+
+				var call = System.Linq.Expressions.Expression.Call(callInstance, method, methodParam);
+				if (r.Operator == "MatchRegex") return call;
+				if (r.Operator == "NotMatchRegex") return System.Linq.Expressions.Expression.Not(call);
+			}
+
+			if (tProp.Name == "String")
+			{ 
+				var method = tProp.GetMethod(r.Operator, new Type[] { typeof(string) });
+				var tParam = method.GetParameters()[0].ParameterType;
+				var right = System.Linq.Expressions.Expression.Constant(Convert.ChangeType(r.TargetValue, tParam));
+				// use a method call, e.g. 'Contains' -> 'u.Tags.Contains(some_tag)'
+				return System.Linq.Expressions.Expression.Call(left, method, right);
+			}
+			else { 
+				var method = tProp.GetMethod(r.Operator);
+				var tParam = method.GetParameters()[0].ParameterType;
+				var right = System.Linq.Expressions.Expression.Constant(Convert.ChangeType(r.TargetValue, tParam));
+				// use a method call, e.g. 'Contains' -> 'u.Tags.Contains(some_tag)'
+				return System.Linq.Expressions.Expression.Call(left, method, right);
 			}
 		}
 
@@ -67,7 +83,7 @@ namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
 					rule.TargetValue = ConvertToUnixTimestamp(somedate).ToString();
 				}
 			}
-		    return rules;
+			return rules;
 		}
 
 		public static double ConvertToUnixTimestamp(DateTime date)
