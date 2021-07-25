@@ -18,6 +18,13 @@ namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
         public List<string> Producers { get; set; }
         public List<string> Studios { get; set; }
         public List<string> Writers { get; set; }
+        public string MediaType { get; set; }
+        public string Album { get; set; }
+        public double DateCreated { get; set; }
+        public double DateLastRefreshed { get; set; }
+        public double DateLastSaved { get; set; }
+        public double DateModified { get; set; }
+
         public Operand(string name)
         {
             Actors = new List<string>();
@@ -33,6 +40,12 @@ namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
             Producers = new List<string>();
             Studios = new List<string>();
             Writers = new List<string>();
+            MediaType = "";
+            Album = "";
+            DateCreated = 0;
+            DateLastRefreshed = 0;
+            DateLastSaved = 0;
+            DateModified = 0;
         }
     }
 }
