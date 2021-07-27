@@ -1,61 +1,70 @@
 # Smart Playlist Plugin for Jellyfin
+
 ## Overview
+
 This is an attempt to make a smart playlist similar to what iTunes, Plex, and other media players have. It is still in early development and has some limitations which will not be able to be resolved until Jellyfin impliments some features.
 
 Note: The playlist json format is still in flux as I figure things out.
 
 ## How to Install
-To use this plugin download the DLL and place it in your plugin directory.  Once launched you should find in your data directory a folder called "smartplaylist". Your JSON files describing a playlist go in here.
+
+To use this plugin download the DLL and place it in your plugin directory. Once launched you should find in your data directory a folder called "smartplaylist". Your JSON files describing a playlist go in here.
 
 ## Configuration
+
 To create a new playlist, create a json file in this directory having a format such as the following.
 
 ```json
 {
-   "Name":"CGP Grey",
-   "FileName":"cgp_grey",
-   "User":"rob",
-   "ExpressionSets":[
-      {
-         "Expressions":[
-            {
-               "MemberName":"Directors",
-               "Operator":"Contains",
-               "TargetValue":"CGP Grey"
-            },
-            {
-               "MemberName":"IsPlayed",
-               "Operator":"Equal",
-               "TargetValue":"False"
-            }
-         ]
-      },
-      {
-         "Expressions":[
-            {
-               "MemberName":"Directors",
-               "Operator":"Contains",
-               "TargetValue":"Nerdwriter1"
-            },
-            {
-               "MemberName":"IsPlayed",
-               "Operator":"Equal",
-               "TargetValue":"False"
-            }
-         ]
-      }
-   ],
-   "Order":{
-      "Name":"Release Date Ascending"
-   }
+  "Name": "CGP Grey",
+  "FileName": "cgp_grey",
+  "User": "rob",
+  "ExpressionSets": [
+    {
+      "Expressions": [
+        {
+          "MemberName": "Directors",
+          "Operator": "Contains",
+          "TargetValue": "CGP Grey"
+        },
+        {
+          "MemberName": "IsPlayed",
+          "Operator": "Equal",
+          "TargetValue": "False"
+        }
+      ]
+    },
+    {
+      "Expressions": [
+        {
+          "MemberName": "Directors",
+          "Operator": "Contains",
+          "TargetValue": "Nerdwriter1"
+        },
+        {
+          "MemberName": "IsPlayed",
+          "Operator": "Equal",
+          "TargetValue": "False"
+        }
+      ]
+    }
+  ],
+  "Order": {
+    "Name": "Release Date Ascending"
+  }
 }
 ```
+
 - Id: This field is created after the playlist is first rendered. Do not fill this in yourself.
 - Name: Name of the playlist as it will appear in Jellyfin
 - FileName: The actual filename. If you create a file named cgpgrey_playlist.json then this should be cgpgrey_playlist
 - User: Name of the user for the playlist
 - ExpressionSets: This is a list of Expressions. Each expression is OR'ed together.
-- Expressions: This is the meat of the plugin. Expressions are a list of maps containing MemberName, Operator, and TargetValue. I am working on a list of all valid things. [This link](https://docs.microsoft.com/en-us/dotnet/api/system.linq.expressions.expressiontype?redirectedfrom=MSDN&view=net-5.0) is a list of all valid operators within expression trees but only a subset are valid for this.
+- Expressions: This is the meat of the plugin. Expressions are a list of maps containing MemberName, Operator, and TargetValue. I am working on a list of all valid things. Currently there are three sets of expressions:
+
+  - Universal LINQ expression operators: [This link](https://docs.microsoft.com/en-us/dotnet/api/system.linq.expressions.expressiontype?redirectedfrom=MSDN&view=net-5.0) is a list of all valid operators within expression trees but only a subset are valid for a specific operand.
+  - String operators: Equals, StartsWith, EndsWith, Contains.
+  - Regex operators: MatchRegex, NotMatchRegex.
 
 - MemberName: This is a reference to the properties in [Operand](https://github.com/ankenyr/jellyfin-smartplaylist-plugin/blob/master/Jellyfin.Plugin.SmartPlaylist/QueryEngine/Operand.cs "Operand"). You set this string to one of the property names to reference what you wish to filter on.
 - Operator: An operation used to compare the TargetValue to the property of each piece of media. The above example would match anything with the director set as CGP Grey with a Premiere Date less than 2020/07/01
@@ -65,7 +74,9 @@ To create a new playlist, create a json file in this directory having a format s
   - NoOrder
   - Release Date Ascending
   - Release Date Descending
+
 ## Future work
+
 - Add in more properties to be matched against. Please file aa feature request if you have ideas.
 - Document all operators that are valid for each property.
 - Explore creating custom property types with custom operators.
@@ -73,6 +84,7 @@ To create a new playlist, create a json file in this directory having a format s
 - Add more sorting methods.
 - Pretty Print JSON files, possibly this should be done by jellyfin itself.
 
-##Credits
+## Credits
+
 Rule engine was inspired by [this](https://stackoverflow.com/questions/6488034/how-to-implement-a-rule-engine "this") post in Stack Overflow.
 Initially wanted to convert [ppankiewicz's plugin](https://github.com/ppankiewicz/Emby.SmartPlaylist.Plugin "ppankiewicz's plugin") but found it to be too incompatible and difficult to work with. I did take some bits of code mostly around interfacing with the filesystem.

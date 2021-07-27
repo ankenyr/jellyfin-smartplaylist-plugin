@@ -26,19 +26,24 @@ namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
                 operand.Producers = people.Where(x => x.Type.Equals("Producer")).Select(x => x.Name).ToList();
                 operand.Writers = people.Where(x => x.Type.Equals("Writer")).Select(x => x.Name).ToList();
             }
+
             operand.Genres = baseItem.Genres.ToList();
             operand.IsPlayed = baseItem.IsPlayed(user);
             operand.Studios = baseItem.Studios.ToList();
             operand.CommunityRating = baseItem.CommunityRating.GetValueOrDefault();
             operand.CriticRating = baseItem.CriticRating.GetValueOrDefault();
+            operand.MediaType = baseItem.MediaType;
+            operand.Album = baseItem.Album;
 
             if (baseItem.PremiereDate.HasValue)
             {
-                DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-                var dt = DateTime.Parse(baseItem.PremiereDate.ToString());
-                TimeSpan diff = dt.ToUniversalTime() - origin;
-                operand.PremiereDate = Math.Floor(diff.TotalSeconds);
+                operand.PremiereDate = new DateTimeOffset(baseItem.PremiereDate.Value).ToUnixTimeSeconds();
             }
+            operand.DateCreated = new DateTimeOffset(baseItem.DateCreated).ToUnixTimeSeconds();
+            operand.DateLastRefreshed = new DateTimeOffset(baseItem.DateLastRefreshed).ToUnixTimeSeconds();
+            operand.DateLastSaved = new DateTimeOffset(baseItem.DateLastSaved).ToUnixTimeSeconds();
+            operand.DateModified = new DateTimeOffset(baseItem.DateModified).ToUnixTimeSeconds();
+            
             operand.FolderPath = baseItem.ContainingFolderPath;
             return operand;
         }
