@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using MediaBrowser.Controller;
 
@@ -13,6 +12,7 @@ namespace Jellyfin.Plugin.SmartPlaylist
         string[] GetAllSmartPlaylistFilePaths();
         string GetSmartPlaylistPath(string userId, string playlistId);
     }
+
     public class SmartPlaylistFileSystem : ISmartPlaylistFileSystem
     {
         // Class Constructor for SmartPlaylistFileSystem

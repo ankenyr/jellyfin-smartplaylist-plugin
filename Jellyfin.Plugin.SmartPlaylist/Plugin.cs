@@ -5,7 +5,6 @@ using MediaBrowser.Common.Plugins;
 using MediaBrowser.Model.Plugins;
 using MediaBrowser.Model.Serialization;
 
-
 namespace Jellyfin.Plugin.SmartPlaylist
 {
     public class Plugin : BasePlugin<BasePluginConfiguration>, IHasWebPages
@@ -13,7 +12,7 @@ namespace Jellyfin.Plugin.SmartPlaylist
         public Plugin(
             IApplicationPaths applicationPaths,
             IXmlSerializer xmlSerializer
-            ) : base(applicationPaths, xmlSerializer)
+        ) : base(applicationPaths, xmlSerializer)
         {
             Instance = this;
         }
@@ -35,10 +34,8 @@ namespace Jellyfin.Plugin.SmartPlaylist
                 {
                     //Name = "smartplaylist.html",
                     //EmbeddedResourcePath = string.Format("{0}.Configuration.smartplaylist.html", GetType().Namespace),
-                    
                 }
             };
         }
-
     }
 }
