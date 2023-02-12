@@ -2,14 +2,15 @@
 {
     public class Expression
     {
-        public string MemberName{ get; set; }
+        public Expression(string memberName, string @operator, string targetValue)
+        {
+            MemberName = memberName;
+            Operator = @operator;
+            TargetValue = targetValue;
+        }
+
+        public string MemberName { get; set; }
         public string Operator { get; set; }
         public string TargetValue { get; set; }
-        public Expression(string MemberName, string Operator, string TargetValue)
-        {
-            this.MemberName = MemberName;
-            this.Operator = Operator;
-            this.TargetValue = TargetValue;
-        }
     }
 }

@@ -1,8 +1,7 @@
-using System;
-using Xunit;
+using System.Collections.Generic;
 using Jellyfin.Plugin.SmartPlaylist;
 using Jellyfin.Plugin.SmartPlaylist.QueryEngine;
-using System.Collections.Generic;
+using Xunit;
 
 namespace Tests
 {
@@ -11,15 +10,19 @@ namespace Tests
         [Fact]
         public void DtoToSmartPlaylist()
         {
-            var dto = new SmartPlaylistDto();
-            dto.Id = "87ccaa10-f801-4a7a-be40-46ede34adb22";
-            dto.Name = "Foo";
-            dto.User = "Rob";
-            
-            var es = new ExpressionSet();
-            es.Expressions = new List<Expression>
+            var dto = new SmartPlaylistDto
             {
-                new Expression("foo", "bar", "biz")
+                Id = "87ccaa10-f801-4a7a-be40-46ede34adb22",
+                Name = "Foo",
+                User = "Rob"
+            };
+
+            var es = new ExpressionSet
+            {
+                Expressions = new List<Expression>
+                {
+                    new("foo", "bar", "biz")
+                }
             };
             dto.ExpressionSets = new List<ExpressionSet>
             {
@@ -29,16 +32,16 @@ namespace Tests
             {
                 Name = "Release Date Descending"
             };
-            SmartPlaylist smart_playlist = new SmartPlaylist(dto);
+            var smartPlaylist = new SmartPlaylist(dto);
 
-            Assert.Equal(1000, smart_playlist.MaxItems);
-            Assert.Equal("87ccaa10-f801-4a7a-be40-46ede34adb22", smart_playlist.Id);
-            Assert.Equal("Foo", smart_playlist.Name);
-            Assert.Equal("Rob", smart_playlist.User);
-            Assert.Equal("foo", smart_playlist.ExpressionSets[0].Expressions[0].MemberName);
-            Assert.Equal("bar",smart_playlist.ExpressionSets[0].Expressions[0].Operator);
-            Assert.Equal("biz",smart_playlist.ExpressionSets[0].Expressions[0].TargetValue);
-            Assert.Equal("PremiereDateOrderDesc", smart_playlist.Order.GetType().Name);
+            Assert.Equal(1000, smartPlaylist.MaxItems);
+            Assert.Equal("87ccaa10-f801-4a7a-be40-46ede34adb22", smartPlaylist.Id);
+            Assert.Equal("Foo", smartPlaylist.Name);
+            Assert.Equal("Rob", smartPlaylist.User);
+            Assert.Equal("foo", smartPlaylist.ExpressionSets[0].Expressions[0].MemberName);
+            Assert.Equal("bar", smartPlaylist.ExpressionSets[0].Expressions[0].Operator);
+            Assert.Equal("biz", smartPlaylist.ExpressionSets[0].Expressions[0].TargetValue);
+            Assert.Equal("PremiereDateOrderDesc", smartPlaylist.Order.GetType().Name);
         }
     }
 }

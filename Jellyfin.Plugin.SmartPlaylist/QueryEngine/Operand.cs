@@ -4,27 +4,6 @@ namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
 {
     public class Operand
     {
-        public List<string> Actors { get; set; }
-        public List<string> Composers { get; set; }
-        public float CommunityRating { get; set; }
-        public float CriticRating { get; set; }
-        public List<string> Directors { get; set; }
-        public List<string> Genres { get; set; }
-        public List<string> GuestStars { get; set; }
-        public bool IsPlayed { get; set; }
-        public string Name { get; set; }
-        public string FolderPath { get; set; }
-        public double PremiereDate { get; set; }
-        public List<string> Producers { get; set; }
-        public List<string> Studios { get; set; }
-        public List<string> Writers { get; set; }
-        public string MediaType { get; set; }
-        public string Album { get; set; }
-        public double DateCreated { get; set; }
-        public double DateLastRefreshed { get; set; }
-        public double DateLastSaved { get; set; }
-        public double DateModified { get; set; }
-
         public Operand(string name)
         {
             Actors = new List<string>();
@@ -47,5 +26,26 @@ namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
             DateLastSaved = 0;
             DateModified = 0;
         }
+
+        public List<string> Actors { get; set; }
+        public List<string> Composers { get; set; }
+        public float CommunityRating { get; set; }
+        public float CriticRating { get; set; }
+        public List<string> Directors { get; set; }
+        public List<string> Genres { get; set; }
+        public List<string> GuestStars { get; set; }
+        public bool IsPlayed { get; set; }
+        public string Name { get; set; }
+        public string FolderPath { get; set; }
+        public double PremiereDate { get; set; }
+        public List<string> Producers { get; set; }
+        public List<string> Studios { get; set; }
+        public List<string> Writers { get; set; }
+        public string MediaType { get; set; }
+        public string Album { get; set; }
+        public double DateCreated { get; set; }
+        public double DateLastRefreshed { get; set; }
+        public double DateLastSaved { get; set; }
+        public double DateModified { get; set; }
     }
 }

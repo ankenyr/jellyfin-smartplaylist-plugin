@@ -1,20 +1,17 @@
-﻿using MediaBrowser.Controller.Entities;
-using System;
-using System.Collections.Generic;
-using Jellyfin.Data.Entities;
+﻿using System;
 using System.Linq;
+using Jellyfin.Data.Entities;
+using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Library;
 
 namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
 {
-    class OperandFactory
+    internal class OperandFactory
     {
         // Returns a specific operand povided a baseitem, user, and library manager object.
         public static Operand GetMediaType(ILibraryManager libraryManager, BaseItem baseItem, User user)
         {
-
             var operand = new Operand(baseItem.Name);
-            var directors = new List<string> { };
             var people = libraryManager.GetPeople(baseItem);
             if (people.Any())
             {
@@ -36,14 +33,12 @@ namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
             operand.Album = baseItem.Album;
 
             if (baseItem.PremiereDate.HasValue)
-            {
                 operand.PremiereDate = new DateTimeOffset(baseItem.PremiereDate.Value).ToUnixTimeSeconds();
-            }
             operand.DateCreated = new DateTimeOffset(baseItem.DateCreated).ToUnixTimeSeconds();
             operand.DateLastRefreshed = new DateTimeOffset(baseItem.DateLastRefreshed).ToUnixTimeSeconds();
             operand.DateLastSaved = new DateTimeOffset(baseItem.DateLastSaved).ToUnixTimeSeconds();
             operand.DateModified = new DateTimeOffset(baseItem.DateModified).ToUnixTimeSeconds();
-            
+
             operand.FolderPath = baseItem.ContainingFolderPath;
             return operand;
         }
