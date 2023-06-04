@@ -27,7 +27,7 @@ namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
             operand.Genres = baseItem.Genres.ToList();
             operand.IsPlayed = baseItem.IsPlayed(user);
             operand.Studios = baseItem.Studios.ToList();
-			operand.Tags = baseItem.Tags.ToList();
+	    operand.Tags = baseItem.Tags.ToList();
             operand.CommunityRating = baseItem.CommunityRating.GetValueOrDefault();
             operand.CriticRating = baseItem.CriticRating.GetValueOrDefault();
             operand.MediaType = baseItem.MediaType;
