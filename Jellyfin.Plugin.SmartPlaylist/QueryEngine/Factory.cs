@@ -29,7 +29,7 @@ namespace Jellyfin.Plugin.SmartPlaylist.QueryEngine
             operand.Studios = baseItem.Studios.ToList();
             operand.CommunityRating = baseItem.CommunityRating.GetValueOrDefault();
             operand.CriticRating = baseItem.CriticRating.GetValueOrDefault();
-            operand.MediaType = baseItem.MediaType;
+            operand.MediaType = baseItem.MediaType.ToString();
             operand.Album = baseItem.Album;
 
             if (baseItem.PremiereDate.HasValue)

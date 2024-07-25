@@ -118,7 +118,7 @@ namespace Jellyfin.Plugin.SmartPlaylist.ScheduleTasks
 
                 var toRemove = plItems.Select(x => x.Id.ToString()).ToList();
                 RemoveFromPlaylist(playlist.Id.ToString(), toRemove);
-                await _playlistManager.AddToPlaylistAsync(playlist.Id, newItems.ToArray(), user.Id);
+                await _playlistManager.AddItemToPlaylistAsync(playlist.Id, newItems.ToArray(), user.Id);
             }
         }
 
